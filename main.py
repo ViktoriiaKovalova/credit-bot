@@ -36,8 +36,11 @@ async def handle_main_menu(message: Message, state: FSMContext):
     if user_id not in opened_credit_lines:
         opened_credit_lines[user_id] = ""
     if act != "Start credit line":
-        await message.answer("Here are your credit lines: %s" % opened_credit_lines[user_id],
-                             reply_markup=mgain_keyboard)
+        if not opened_credit_lines[user_id]:
+            await message.answer("You don't have any credit lines yet.", reply_markup=main_keyboard)
+        else:
+            await message.answer("Here are your credit lines: %s" % opened_credit_lines[user_id],
+                                 reply_markup=main_keyboard)
         await Form.main_state.set()
     else:
         await state.update_data(action_made=act)
